@@ -1,10 +1,12 @@
 "use client";
-import { useRef, useState } from "react";
-import classes from "./image-picker.module.css";
+
 import Image from "next/image";
 
-const ImagePicker = ({ label, name }) => {
-  const [pickedImage, setPickedImage] = useState(null); // Initialized useState with null
+import { useRef, useState } from "react";
+import classes from "./image-picker.module.css";
+
+export default function ImagePicker({ label, name }) {
+  const [pickedImage, setPickedImage] = useState();
   const imageInput = useRef();
 
   function handlePickImage() {
@@ -12,8 +14,8 @@ const ImagePicker = ({ label, name }) => {
   }
 
   function handleImageChange(event) {
-    // Added event parameter
     const file = event.target.files[0];
+
     if (!file) {
       setPickedImage(null);
       return;
@@ -33,13 +35,9 @@ const ImagePicker = ({ label, name }) => {
       <label htmlFor={name}>{label}</label>
       <div className={classes.controls}>
         <div className={classes.preview}>
-          {!pickedImage && <p>No Image Picked Yet</p>}
+          {!pickedImage && <p>No image picked yet.</p>}
           {pickedImage && (
-            <Image
-              src={pickedImage}
-              alt="The Image selected user "
-              fill
-            ></Image>
+            <Image src={pickedImage} alt="The image selected by user" fill />
           )}
         </div>
         <input
@@ -48,8 +46,9 @@ const ImagePicker = ({ label, name }) => {
           id="image"
           accept="image/png, image/jpeg"
           name={name}
-          ref={imageInput} // Assigned ref to the input element
+          ref={imageInput}
           onChange={handleImageChange}
+          required
         />
         <button
           className={classes.button}
@@ -61,6 +60,4 @@ const ImagePicker = ({ label, name }) => {
       </div>
     </div>
   );
-};
-
-export default ImagePicker;
+}
